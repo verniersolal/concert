@@ -63,7 +63,7 @@ def insert():
 
 @app.route('/')
 def home():
-    return 'render'
+    return render_template('index.html')
 
 # ADMIN routes
 
