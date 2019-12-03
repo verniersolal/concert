@@ -1,7 +1,10 @@
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request
 from flask_cors import CORS
 from flask_mysqldb import MySQL
 from config.config import config
+from werkzeug.utils import secure_filename
+import os
+
 app = Flask(__name__)
 CORS(app)
 mysql = MySQL(app)
@@ -17,21 +20,44 @@ app.config['MYSQL_DB'] = config['db']
 
 # upload folder for files
 UPLOAD_FOLDER = './files'
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 # MVP: upload file to check the auth
-@app.route('/upload', methods=['POST'])
-def upload():
-    return 0
+@app.route('/', methods=['POST'])
+def upload_file():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            return 'not a file'
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            return 'not a name'
+        if file:
+            filename = secure_filename(file.filename)
+            print(filename)
+            return 'ok'
 
 
 # insert file into database
 @app.route('/insert', methods=['POST'])
 def insert():
-    HashController.insert_into_db()
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            return 'not a file'
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            return 'not a name'
+        if file:
+            filename = secure_filename(file.filename)
+            print(filename)
+            return 'ok'
     return 0
 
 

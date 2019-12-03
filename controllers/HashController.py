@@ -1,37 +1,21 @@
 import hashlib
 from server import mysql
 
+# constant variable
+BLOCKSIZE = 65536
+
 
 class HashController:
 
-    def hash_pourri(self, acte_name):
-        print("hello")
-        BUF_SIZE = 65536
-
-        md5 = hashlib.md5()
-        sha1 = hashlib.sha1()
-
-        with open(acte_name, 'rb') as f:
-            while True:
-                data = f.read(BUF_SIZE)
-                if not data:
-                    break
-                md5.update(data)
-                sha1.update(data)
-
-        # print(format(md5.hexdigest()))
-        # print(format(sha1.hexdigest()))
-
-        # Comparing hashes to database
-
-        i = 0
-        while Hash_Database[i][0] != "END":
-            if format(md5.hexdigest()) == Hash_Database[i][1]:
-                return "L'acte", Hash_Database[i][0], "est authentique. Il à été téléversé le",Hash_Database[i][2]
-            else:
-                i += 1
-            if Hash_Database[i][0] == "END":
-                return "L'acte n'est pas présent dans les données"
+    @staticmethod
+    def hash_file(filename):
+        hasher = hashlib.sha1()
+        with open(filename, 'rb') as afile:
+            buf = afile.read(BLOCKSIZE)
+            while len(buf) > 0:
+                hasher.update(buf)
+                buf = afile.read(BLOCKSIZE)
+        print(hasher.hexdigest())
 
     @classmethod
     def get_users(cls):
