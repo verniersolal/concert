@@ -27,16 +27,19 @@ function enableButton() {
 
 function openForm(event) {
     console.log(event.target.id);
+    document.getElementById("certifBtn").classList.replace("disabled","enabled");
+    document.getElementById("checkBtn").classList.replace("disabled","enabled");
     var formContainer = document.getElementById("formContainer");
     switch (event.target.id) {
         case 'checkBtn' :
+            event.target.classList.replace("enabled","disabled");
             formContainer.innerHTML = "\t<fieldset>\n" +
                 "\t\t\t<legend>Vérifiez l'authenticité d'un acte</legend>\n" +
                 "\t\t\t<form id='form' method=\"post\" action=\"/upload\" enctype=\"multipart/form-data\">\n" +
                 "\t\t\t\t<div class=\"file-field input-field\">\n" +
                 "\t\t\t\t\t<div class=\"btn\">\n" +
                 "\t\t\t\t\t\t<i class=\"material-icons\">attach_file</i>\n" +
-                "\t\t\t\t\t\t<input onchange=\"enableButton()\" accept=\".pdf\" id=\"myfile\" name=\"celebrity\" type=\"file\">\n" +
+                "\t\t\t\t\t\t<input onchange=\"enableButton()\" accept=\".pdf\" id=\"myfile\" name=\"file\" type=\"file\">\n" +
                 "\t\t\t\t\t</div>\n" +
                 "\t\t\t\t\t<div class=\"file-path-wrapper\">\n" +
                 "\t\t\t\t\t\t<input class=\"file-path validate\" placeholder=\"Déposez votre acte\"  type=\"text\">\n" +
@@ -52,13 +55,14 @@ function openForm(event) {
             formContainer.classList.replace("scale-out","scale-in");
             break;
         case 'certifBtn':
+            event.target.classList.replace("enabled","disabled");
             formContainer.innerHTML = "<fieldset>\n" +
                 "\t\t\t<legend>Certifiez un acte</legend>\n" +
                 "\t\t\t<form id='form' method=\"post\" action=\"/insert\" enctype=\"multipart/form-data\">\n" +
                 "\t\t\t\t<div class=\"file-field input-field\">\n" +
                 "\t\t\t\t\t<div class=\"btn\">\n" +
                 "\t\t\t\t\t\t<i class=\"material-icons\">attach_file</i>\n" +
-                "\t\t\t\t\t\t<input onchange=\"enableButton()\" accept=\".pdf\" id=\"myfile\" name=\"celebrity\" type=\"file\">\n" +
+                "\t\t\t\t\t\t<input onchange=\"enableButton()\" accept=\".pdf\" id=\"myfile\" name=\"file\" type=\"file\">\n" +
                 "\t\t\t\t\t</div>\n" +
                 "\t\t\t\t\t<div class=\"file-path-wrapper\">\n" +
                 "\t\t\t\t\t\t<input class=\"file-path validate\" placeholder=\"Déposez votre acte\"  type=\"text\">\n" +

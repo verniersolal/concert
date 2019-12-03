@@ -29,9 +29,9 @@ def upload_file():
     if request.method == 'POST':
         print(request.files)
         # check if the post request has the file part
-        if 'celebrity' not in request.files:
+        if 'file' not in request.files:
             return 'not a file'
-        file = request.files['celebrity']
+        file = request.files['file']
         # if user does not select file, browser also
         # submit an empty part without filename
         if file.filename == '':
@@ -55,9 +55,9 @@ def upload_file():
 def insert():
     if request.method == 'POST':
         # check if the post request has the file part
-        if 'celebrity' not in request.files:
+        if 'file' not in request.files:
             return 'not a file'
-        file = request.files['celebrity']
+        file = request.files['file']
         # if user does not select file, browser also
         # submit an empty part without filename
         if file.filename == '':
