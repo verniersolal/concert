@@ -45,8 +45,9 @@ def upload_file():
             file_hash = HashController.hash_file(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             # remove the file
             os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            result = 'ok' if HashController.compare_hash(file_hash) == 1 else 'ko'
-            return result
+            is_checked = HashController.compare_hash(file_hash)
+            result = 'ok' if is_checked == 1 else 'ko'
+            return jsonify(result)
 
 
 # insert file into database
@@ -54,19 +55,19 @@ def upload_file():
 def insert():
     if request.method == 'POST':
         # check if the post request has the file part
-        if 'file' not in request.files:
+        if 'celebrity' not in request.files:
             return 'not a file'
-        file = request.files['file']
+        file = request.files['celebrity']
         # if user does not select file, browser also
         # submit an empty part without filename
         if file.filename == '':
             return 'not a name'
         if file:
             filename = secure_filename(file.filename)
-            print(filename)
-            return 'ok'
-    return 0
-
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            file_hash = HashController.hash_file(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            HashController.insert_into_db(filename, file_hash)
+            return jsonify({'message': 'file inserted'})
 
 @app.route('/')
 def home():

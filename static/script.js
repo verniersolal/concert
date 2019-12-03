@@ -54,7 +54,7 @@ function openForm(event) {
         case 'certifBtn':
             formContainer.innerHTML = "<fieldset>\n" +
                 "\t\t\t<legend>Certifiez un acte</legend>\n" +
-                "\t\t\t<form id='form' method=\"post\" action=\"/upload\" enctype=\"multipart/form-data\">\n" +
+                "\t\t\t<form id='form' method=\"post\" action=\"/insert\" enctype=\"multipart/form-data\">\n" +
                 "\t\t\t\t<div class=\"file-field input-field\">\n" +
                 "\t\t\t\t\t<div class=\"btn\">\n" +
                 "\t\t\t\t\t\t<i class=\"material-icons\">attach_file</i>\n" +
