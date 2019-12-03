@@ -4,7 +4,6 @@ from flask_mysqldb import MySQL
 from config.config import config
 from werkzeug.utils import secure_filename
 import os
-
 app = Flask(__name__)
 CORS(app)
 mysql = MySQL(app)
@@ -25,21 +24,29 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 # MVP: upload file to check the auth
-@app.route('/', methods=['POST'])
+@app.route('/upload', methods=['POST'])
 def upload_file():
     if request.method == 'POST':
+        print(request.files)
         # check if the post request has the file part
-        if 'file' not in request.files:
+        if 'celebrity' not in request.files:
             return 'not a file'
-        file = request.files['file']
+        file = request.files['celebrity']
         # if user does not select file, browser also
         # submit an empty part without filename
         if file.filename == '':
             return 'not a name'
         if file:
+            # secure filename
             filename = secure_filename(file.filename)
-            print(filename)
-            return 'ok'
+            # add into folder for read it and hash it
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            # hash function
+            file_hash = HashController.hash_file(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            # remove the file
+            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            result = 'ok' if HashController.compare_hash(file_hash) == 1 else 'ko'
+            return result
 
 
 # insert file into database
