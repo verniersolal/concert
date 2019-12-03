@@ -1,10 +1,5 @@
 import hashlib
-Hash_Database = [["Activity.pdf-md5", "06e85af5cdbf921e4a1c5d1d2cd4bc04", "22/11/2019"],
-                ["Activity.pdr-sha1", "d07a58d750052fc575a57bbb7f0410a3b20990ca", "22/11/2019"],
-                ["Charte-Epitech-2019-2020.pdf-md5", "120cbeccb827f17fb4078e9758e0b075", "21/11/2019"],
-                ["Charte-Epitech-2019-2020.pdf-sha1", "16e469fbb708a9317d9a84db40244b78f77ff5a1", "21/12/2019"],
-                ["CDD_a_terme_imprecis_a_temps_partiel.pdf", "837a3fe04c8ad89c038323c77eda571f", "21/10/2019"],
-                ["END"]]
+from server import mysql
 
 
 class HashController:
@@ -37,3 +32,23 @@ class HashController:
                 i += 1
             if Hash_Database[i][0] == "END":
                 return "L'acte n'est pas présent dans les données"
+
+    @classmethod
+    def get_users(cls):
+        cur = mysql.connection.cursor()
+        cur.execute('select user_name from sys.user')
+        return cur.fetchall()
+
+    @classmethod
+    def get_files(cls):
+        cur = mysql.connection.cursor()
+        cur.execute('select file_name from sys.file')
+        return cur.fetchall()
+
+    @classmethod
+    def insert_into_db(cls):
+        cur = mysql.connection.cursor()
+        cur.execute("insert into file (file_name, file_hash, created_at) values ('{0}', '{1}', '{2}')")
+        mysql.connection.commit()
+        return 0
+
