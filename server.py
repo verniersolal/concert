@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 from flask_cors import CORS
 from controllers.HashController import HashController
 
@@ -20,6 +20,9 @@ def compare_hash(acte_name):
 
     return jsonify(retour_pourri)
 
+@app.route('/', methods=["GET"])
+def index():
+    return render_template('index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
