@@ -1,21 +1,12 @@
 from flask import Flask, jsonify, render_template, request
 from flask_cors import CORS
-from flask_mysqldb import MySQL
-from config.config import config
 from werkzeug.utils import secure_filename
 import os
-app = Flask(__name__)
-CORS(app)
-mysql = MySQL(app)
-
-# import of controller after mysql variable (circular dependence)
 from controllers.HashController import HashController
 
-# Mysql database config
-app.config['MYSQL_HOST'] = config['host']
-app.config['MYSQL_USER'] = config['user']
-app.config['MYSQL_PASSWORD'] = config['pass']
-app.config['MYSQL_DB'] = config['db']
+app = Flask(__name__)
+CORS(app)
+
 
 # upload folder for files
 UPLOAD_FOLDER = './files'
@@ -27,11 +18,10 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if request.method == 'POST':
-        print(request.files)
         # check if the post request has the file part
-        if 'celebrity' not in request.files:
+        if 'file' not in request.files:
             return 'not a file'
-        file = request.files['celebrity']
+        file = request.files['file']
         # if user does not select file, browser also
         # submit an empty part without filename
         if file.filename == '':
@@ -55,9 +45,10 @@ def upload_file():
 def insert():
     if request.method == 'POST':
         # check if the post request has the file part
-        if 'celebrity' not in request.files:
+        print(request.files)
+        if 'file' not in request.files:
             return 'not a file'
-        file = request.files['celebrity']
+        file = request.files['file']
         # if user does not select file, browser also
         # submit an empty part without filename
         if file.filename == '':
@@ -68,6 +59,7 @@ def insert():
             file_hash = HashController.hash_file(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             HashController.insert_into_db(filename, file_hash)
             return jsonify({'message': 'file inserted'})
+
 
 @app.route('/')
 def home():
