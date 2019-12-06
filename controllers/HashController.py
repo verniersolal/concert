@@ -1,7 +1,5 @@
 import hashlib
 
-from sqlalchemy import create_engine
-
 import datetime
 from config.config import config
 
